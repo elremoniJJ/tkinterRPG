@@ -7,7 +7,7 @@ def goblin():
         "goblin_strength": randint(14, 21),
         "goblin_health": randint(6, 12),
         "goblin_speed": randint(12, 16),
-        "goblin_intelligence": randint(5, 8),
+        "goblin_intelligence": randint(14, 15),
         "goblin_charisma": randint(5, 10)
     }
     return goblin

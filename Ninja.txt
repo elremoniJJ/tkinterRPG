@@ -1,13 +1,13 @@
 Type:   Ninja
-Strength:   11
-Health:   12
-Speed:   12
-Intelligence:   13
-Charisma:   11
-Coins:   58
+Strength:   8
+Health:   6
+Speed:   16
+Intelligence:   11
+Charisma:   12
+Coins:   53
 Shield:   
 Health potion:   
 Weapon:   
-Monsters killed:   0
+Monsters killed:   6
 Attack:   11
-Defense:   18
+Defense:   17

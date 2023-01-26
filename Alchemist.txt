@@ -1,13 +1,13 @@
 Type:   Alchemist
-Strength:   6
-Health:   8
-Speed:   10
-Intelligence:   19
-Charisma:   17
-Coins:   41
+Strength:   4
+Health:   7
+Speed:   11
+Intelligence:   17
+Charisma:   14
+Coins:   67
 Shield:   
 Health potion:   
-Weapon:   Bag of gold dust
-Monsters killed:   0
-Attack:   16
-Defense:   20
+Weapon:   
+Monsters killed:   28
+Attack:   15
+Defense:   22

@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 import ttkbootstrap as ttk
 
@@ -23,7 +24,7 @@ frame1.grid(row=0, column=0, columnspan=3,
             padx=5, pady=5,
             ipadx=3, ipady=4)
 
-# Create frame 4 for info on player static variables
+# Create frame for info on player static variables
 frame2 = ttk.Frame(parent,
                    bootstyle="DANGER",
                    borderwidth=2)
@@ -175,7 +176,8 @@ def startGame(filename, player_character, start_game):
 
     player_equipped_text = ""
     for i in range(6, 13):
-        player_equipped_text += player_attr_lines[i]
+        if i != 10:
+            player_equipped_text += player_attr_lines[i]
     player_stuff = ttk.Label(frame4,
                              text=player_equipped_text,
                              bootstyle="LIGHT")
@@ -201,7 +203,9 @@ def startGame(filename, player_character, start_game):
                          command=lambda: desertJourney(buttonArguments))
     journey2.pack()
 
-    buttonArguments = [filename, player_stuff, go2shop, journey1, journey2, player_progress]
+    buttonArguments = [filename, player_stuff, go2shop,
+                       journey1, journey2,
+                       player_progress, player_desc]
     return
 
 
@@ -219,27 +223,23 @@ def forestJourney(buttonArguments):
     forest = buttonArguments[3]
     desert = buttonArguments[4]
     player_progress = buttonArguments[5]
+    player_desc = buttonArguments[6]
 
     player_progress.config(text="You are in the forest")
 
     buttonDisabler(shop, forest, desert)
 
+    stuff = [char_type, shop, forest, desert, frame5, player_progress, player_desc]
 
     runIntoForest = ttk.Button(frame5,
                        text="Run into the forest",
-                       command=lambda: forestRun(char_type, shop,
-                                                 forest, desert,
-                                                 frame5, player_progress,
-                                                 "You run into the forest and\nget jumped by 5 goblins!"),
+                       command=lambda: forestRun(stuff),
                        bootstyle="SUCCESS")
     runIntoForest.pack()
 
     walkIntoForest = ttk.Button(frame5,
                        text="Walk into the forest",
-                       command=lambda: forestWalk(char_type, shop,
-                                                  forest, desert,
-                                                  frame5, player_progress,
-                                                  "You walk into the forest and\nsee 2 goblins!"),
+                       command=lambda: forestWalk(stuff),
                        bootstyle="SUCCESS")
     walkIntoForest.pack()
 
@@ -254,19 +254,67 @@ def forestJourney(buttonArguments):
                        bootstyle="SUCCESS")
     exitForest.pack()
 
+    def forestBattle(stuff, num_goblins):
+        char_type = stuff[0]
+        shop = stuff[1]
+        forest = stuff[2]
+        desert = stuff[3]
+        frame5 = stuff[4]
+        player_progress = stuff[5]
+        player_desc = stuff[6]
 
-    def forestRun(char_type, shop, forest, desert, frame5, player_progress, msg):
+        msg = f"You have encountered\n{num_goblins} Goblins!"
         player_progress.config(text=msg)
-        num_goblins = random.randint(3,5)
-        battle.battle(char_type, num_goblins)
+
+        for i in range(num_goblins):
+            player_type_text = open(f"{char_type}.txt", "r")
+            player_attr_lines = player_type_text.readlines()
+            player_type_text.close()
+
+            num_monsters_kill = player_attr_lines[10]
+            num_monsters_killed = int(num_monsters_kill[-4:-1])
+
+            time.sleep(1)
+            result = battle.battle(char_type, num_monsters_killed)
+            player_type_text = open(f"{char_type}.txt", "r")
+            player_attr_lines = player_type_text.readlines()
+            player_type_text.close()
+
+            print(f"result ***{result}***")
+            if result == "You died":
+                player_progress.config(text=f"{msg} \nand Died")
+                break
+
+            elif result > 0:
+                print(f"Sooooo.... \n{result} Goblins killed\n")
+                player_attr_lines[10] = f"Monsters killed:   {result}\n"
+                write_char_attr = open(f"{char_type}.txt", "w")
+                for line in player_attr_lines:
+                    write_char_attr.write(line)
+                write_char_attr.close()
+
+                player_desc_text = ""
+                for i in range(1, 6):
+                    player_desc_text += player_attr_lines[i]
+                player_desc_text += player_attr_lines[10]
+
+                player_desc.config(text=player_desc_text)
+                player_progress.config(text=f"Well done\nYou survived the forest")
+                pass
+
+            else:
+                pass
         pass
 
-    def forestWalk(char_type, shop, forest, desert, frame5, player_progress, msg):
-        player_progress.config(text=msg)
-        num_goblins = random.randint(1,2)
-        battle.battle(char_type, num_goblins)
-        pass
 
+    def forestRun(stuff):
+        num_monsters = random.randint(3,5)
+        forestBattle(stuff, num_monsters)
+
+
+    def forestWalk(stuff):
+        num_monsters = random.randint(1,2)
+        forestBattle(stuff, num_monsters)
 
     pass
 
@@ -278,6 +326,7 @@ def desertJourney(buttonArguments):
     forest = buttonArguments[3]
     desert = buttonArguments[4]
     player_progress = buttonArguments[5]
+    player_desc = buttonArguments[6]
 
     player_progress.config(text="You are in the desert")
 
