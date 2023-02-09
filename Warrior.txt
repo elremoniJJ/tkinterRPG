@@ -1,13 +1,13 @@
 Type:   Warrior
-Strength:   16
-Health:   17
-Speed:   12
-Intelligence:   7
+Strength:   19
+Health:   9
+Speed:   8
+Intelligence:   6
 Charisma:   6
-Coins:   52
+Coins:   23
 Shield:   
-Health potion:   
-Weapon:   
-Monsters killed:   8
-Attack:   12
-Defense:   18
+Health potion:   Equipped
+Weapon:   Super sharp sword
+Monsters killed:   12
+Attack:   23
+Defense:   17

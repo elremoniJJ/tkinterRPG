@@ -5,3 +5,5 @@ welcome_message = """
 
 """
 
+warrior_forest = """"""
+

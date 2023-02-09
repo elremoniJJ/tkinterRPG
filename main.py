@@ -69,6 +69,7 @@ def clear_frame(shop, forest, desert, frame, progress, message):
 
 #photo = ttk.PhotoImage(file="images/Hotpot.png")
 #player_progress.config(image=photo)
+
 welcome_note = ttk.Label(frame1,
                          text=Quotes.welcome_message,
                          #image=photo,
@@ -76,13 +77,14 @@ welcome_note = ttk.Label(frame1,
 welcome_note.pack()
 
 
-player_character = ttk.Label(frame1, text="", bootstyle="PRIMARY")
+player_character = ttk.Label(frame1,
+                             bootstyle="PRIMARY")
 player_character.pack()
 
 
 def chosenType():
     welcome_note.destroy()
-    player_character.config(text="")
+    #player_character.config(text="")
     alchemist_button.destroy()
     warrior_button.destroy()
     ninja_button.destroy()
@@ -218,7 +220,7 @@ def buttonDisabler(shop, forest, desert):
 
 def forestJourney(buttonArguments):
     char_type = buttonArguments[0]
-    player_stuff_label = buttonArguments[1]
+    player_stuff = buttonArguments[1]
     shop = buttonArguments[2]
     forest = buttonArguments[3]
     desert = buttonArguments[4]
@@ -229,7 +231,10 @@ def forestJourney(buttonArguments):
 
     buttonDisabler(shop, forest, desert)
 
-    stuff = [char_type, shop, forest, desert, frame5, player_progress, player_desc]
+    stuff = [char_type,
+             shop, forest, desert,
+             frame5,
+             player_progress, player_desc, player_stuff]
 
     runIntoForest = ttk.Button(frame5,
                        text="Run into the forest",
@@ -262,6 +267,7 @@ def forestJourney(buttonArguments):
         frame5 = stuff[4]
         player_progress = stuff[5]
         player_desc = stuff[6]
+        player_stuff = stuff[7]
 
         msg = f"You have encountered\n{num_goblins} Goblins!"
         player_progress.config(text=msg)
@@ -286,20 +292,32 @@ def forestJourney(buttonArguments):
                 break
 
             elif result > 0:
-                print(f"Sooooo.... \n{result} Goblins killed\n")
                 player_attr_lines[10] = f"Monsters killed:   {result}\n"
+
+                print(f"Sooooo.... \n{result} Goblins killed\n")
+
                 write_char_attr = open(f"{char_type}.txt", "w")
                 for line in player_attr_lines:
                     write_char_attr.write(line)
                 write_char_attr.close()
 
-                player_desc_text = ""
+                player_desc_text = f"{char_type}\n"
                 for i in range(1, 6):
                     player_desc_text += player_attr_lines[i]
                 player_desc_text += player_attr_lines[10]
 
                 player_desc.config(text=player_desc_text)
                 player_progress.config(text=f"Well done\nYou survived the forest")
+
+                existing_coins = int(player_attr_lines[6][-4:-1])
+                #player_attr_lines[6] = f"Coins:   {existing_coins + result}\n"
+                player_stuff_text = f"Coins:   {existing_coins + result}\n"
+                for j in range(7, 12):
+                    if j == 10:
+                        continue
+                    player_stuff_text += player_attr_lines[j]
+                player_stuff.config(text=player_stuff_text)
+
                 pass
 
             else:
